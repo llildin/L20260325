@@ -30,6 +30,7 @@ public:
 			T* NewData = new T[Capacity];
 
 			// 2. 원본 복제
+			// memcpy()
 			for (int i = 0; i < Size - 1; i++)
 			{
 				NewData[i] = Data[i];
@@ -93,5 +94,49 @@ public:
 	int* Data;
 	size_t Size = 0;
 	int Capacity = 1;
+
+	class Iterator
+	{
+	public:
+		Iterator(T* InPointer) : Pointer(InPointer)
+		{
+		}
+
+		//전위증가
+		Iterator& operator++()
+		{
+			Pointer++;
+			return *this;
+		}
+		//후위증가
+		Iterator operator++(int)
+		{
+			Pointer++;
+			return Iterator(Pointer);
+		}
+
+		bool operator != (const Iterator & Other)
+		{
+			return Pointer != Other.Pointer;
+		}
+
+		T operator*()
+		{
+			return *Pointer;
+		}
+
+	protected:
+		T* Pointer;
+	};
+
+	Iterator begin()
+	{
+		return Iterator(Data);
+	}
+
+	Iterator end()
+	{
+		return Iterator(Data + Size);
+	}
 };
 
